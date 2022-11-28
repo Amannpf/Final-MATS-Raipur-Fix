@@ -1,0 +1,218 @@
+if ($('.reSubmitLogicForm').length === 1) {
+    addRequired('field_31726');
+
+
+} else {
+    removeRequired('field_31726');
+  
+
+}
+function toHideShow(){
+    if($('#field_31152').val() !=''){
+        $('#field_49954').val('Yes')
+    }
+    else{
+        $('#field_49954').val('No')
+    }
+
+}
+
+$('#field_31152').change(toHideShow);
+if ($('#field_30845').length) {
+    var tokenFeeUpdation = () => {
+        var selectedProgram = $('#field_15766').length == 1 && $('#field_15766').val() != '' ? $('#field_15766').val().split(';;;')[1] : '';
+        $('#field_30845 option').each(function (i, e) {
+            var populateValue = $(e).val().split(';;;')[1];
+            if (selectedProgram === populateValue) {
+                $('#field_30845').val($(e).val()).change().trigger('chosen:updated');
+            } else {
+                $('#field_30845').val('').change().trigger('chosen:updated');
+            }
+        });
+    }
+    tokenFeeUpdation();
+}
+$(document).ajaxStop(tokenFeeUpdation);
+$('#field_15766').change(tokenFeeUpdation);
+
+
+function showMats() {
+    if ($('#field_24223').val() == "MATS COLLEGE" && ($('#program').val() != "" && $('#program').val() != "171303;;;Research")) {
+        $('#field_24330').val('Yes').change().trigger('chosen:updated');
+    } else {
+        $('#field_24330').val('No').change().trigger('chosen:updated');
+    }
+}
+
+$(document).ajaxStop(showMats);
+$('#field_24223, #program').change(showMats);
+
+//---------------------------------------freeze email and mobile -------------------------
+
+if ($('#email').length > 0 && $('#email').val() != '') {
+    $('#email').attr('readonly', 'readonly');
+}
+if ($('#mobile_no').length > 0 && $('#mobile_no').val() != '') {
+    $('#mobile_no').attr('readonly', 'readonly');
+}
+
+$(document).ajaxStop(function () {
+    $("#field_15244_1_2 option[value='20126;;;Not specified/Any Other']").remove().trigger("chosen:updated");
+    $('#field_15252_1_2 option[value="20127;;;Not specified/Any Other"]').remove().trigger("chosen:updated");
+});
+
+
+//-----------------------------------Auto Populate-----------------------------------------
+
+$(document).ajaxStop(function () {
+    $('#field_30845').length ? $('#field_30845').val($('#field_15766 :selected').text()).change() : '';
+});
+
+if ($('#field_30845').length) {
+    var tokenFeeUpdation = () => {
+        var selectedProgram = $('#field_15766').length == 1 && $('#field_15766').val() != '' ? $('#field_15766').val().split(';;;')[1] : '';
+        $('#field_30845 option').each(function (i, e) {
+            var populateValue = $(e).val().split(';;;')[1];
+            if (selectedProgram === populateValue) {
+                $('#field_30845').val($(e).val()).change().trigger('chosen:updated');
+            }
+        });
+    }
+    tokenFeeUpdation();
+}
+$(document).ajaxStop(tokenFeeUpdation);
+$('#field_15766').change(tokenFeeUpdation);
+if ($('.reSubmitLogicForm').length === 1) {
+    $('.field_31726').show();
+    $('.field_31728').show();
+
+    $('.field_27533').hide();
+    $('.field_27923').hide();
+    $('.field_28900').hide();
+    $('.field_28901').hide();
+
+    $('.field_31151').hide();
+    $('.field_31152').hide();
+    $('.field_31153').hide();
+    $('.declaration1').hide();
+    $('.items-normal').html("<p>Offer Acceptance</p>");
+} else {
+    $('.field_31726').hide();
+
+
+}
+
+
+// whenever candidate will accept his offer Acceptance Date field will get the current date automatically by this logic
+if ($('#field_31726_0').length) {
+    function populatecheckbox() {
+        if ($('#field_31726_0').is(':checked')) {
+            if ($('.reSubmitLogicForm').length === 1 && $('#field_31728').length === 1) {
+                var offerAcceptedDate = new Date();
+                let getDate = offerAcceptedDate.getDate() < 10 ? '0' + offerAcceptedDate.getDate() : offerAcceptedDate.getDate();
+                let getMonth = offerAcceptedDate.getMonth() + 1;
+                getMonth = getMonth < 10 ? '0' + getMonth : getMonth;
+                let newCreatedDate = getDate + '/' + getMonth + '/' + offerAcceptedDate.getFullYear();
+                $('#field_31728').val(newCreatedDate).change();
+            
+                
+            }
+        } else {
+            $('#field_31728').val('').change();
+        }
+    }
+    populatecheckbox();
+}
+
+
+
+
+//once Acceptance Date field will get the value by above logic below function will get add 30 days and update the 30 days date field
+
+/*
+function getDateFunction() {
+    var acceptanceDate = $('#field_31728').val() !== "" && $('#field_31728').val() !== undefined ? $('#field_31728').val() : '';
+    if($('#field_31728').val() !== "" && $('#field_31728').val() !== undefined ){
+    var getDate = acceptanceDate.split("/")[0];
+    var getMonth = acceptanceDate.split("/")[1];
+    var getYear = acceptanceDate.split("/")[2];
+    var getCompleteNewDate = new Date(getMonth + '/' + getDate + '/' + getYear);
+    
+    getCompleteNewDate = new Date(getCompleteNewDate.setDate(getCompleteNewDate.getDate() + 30));
+    getCompleteNewDate = new Date(getCompleteNewDate.setMonth(getCompleteNewDate.getMonth() + 1));
+    getDate = getCompleteNewDate.getDate() < 10 ? '0' + getCompleteNewDate.getDate() : getCompleteNewDate.getDate();
+    getMonth = getCompleteNewDate.getMonth();
+    getMonth = getMonth < 10 ? '0' + getMonth : getMonth;
+    getCompleteNewDate = getDate + '/' + getMonth + '/' + getCompleteNewDate.getFullYear();
+    $('#field_31152').val(getCompleteNewDate).change();
+    } else {
+        $('#field_31152').val('').change();
+    }
+}
+
+function getDateFunctionsixty() {
+    var acceptanceDate = $('#field_31152').val() !== "" && $('#field_31152').val() !== undefined ? $('#field_31152').val() : console.log();
+    if($('#field_31152').val() !== "" && $('#field_31152').val() !== undefined){
+    var getDate = acceptanceDate.split("/")[0];
+    var getMonth = acceptanceDate.split("/")[1];
+    var getYear = acceptanceDate.split("/")[2];
+    var getCompleteNewDatesixty = new Date(getMonth + '/' + getDate + '/' + getYear);
+
+    getCompleteNewDatesixty = new Date(getCompleteNewDatesixty.setDate(getCompleteNewDatesixty.getDate() + 30));
+    getCompleteNewDatesixty = new Date(getCompleteNewDatesixty.setMonth(getCompleteNewDatesixty.getMonth() + 1));
+    getDate = getCompleteNewDatesixty.getDate() < 10 ? '0' + getCompleteNewDatesixty.getDate() : getCompleteNewDatesixty.getDate();
+    getMonth = getCompleteNewDatesixty.getMonth()+1;
+    getMonth = getMonth < 10 ? '0' + getMonth : getMonth;
+    getCompleteNewDatesixty = getDate + '/' + getMonth + '/' + getCompleteNewDatesixty.getFullYear();
+    $('#field_31153').val(getCompleteNewDatesixty).change();
+    } else {
+        $('#field_31153').val('').change();
+    }
+}
+if ($('.reSubmitLogicForm').length === 1) {
+    getDateFunction();
+    getDateFunctionsixty();
+    
+}
+
+$('input[name="field_31726[]"]').change(function () {
+    populatecheckbox();
+    getDateFunction();
+    getDateFunctionsixty();
+});
+*/
+
+function newDate30days() {
+    date = new Date();
+    next_date = new Date(date.setDate(date.getDate() + 30));
+    const today = next_date;
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; // Months start at 0!
+    let dd = today.getDate();
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    const formattedToday = dd + '/' + mm + '/' + yyyy;
+    $('#field_31152').val(formattedToday)
+}
+
+function newDate60days() {
+    date = new Date();
+    next_date = new Date(date.setDate(date.getDate() + 60));
+    const today = next_date;
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; // Months start at 0!
+    let dd = today.getDate();
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    const formattedToday = dd + '/' + mm + '/' + yyyy;
+    $('#field_31153').val(formattedToday)
+}
+
+$('#field_31726_0').change(function () {
+    if ($('#field_31726_0').is(':checked')) {
+        newDate30days()
+        newDate60days()
+    } else {
+        $('#field_31152, #field_31153').val('')
+    }
+});
